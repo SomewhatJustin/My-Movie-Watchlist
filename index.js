@@ -1,3 +1,6 @@
+let movieResultsArray = []
+let wishList = []
+
 // Gitignored API key
 import { omdbKey } from './secrets.js'
 
@@ -23,35 +26,71 @@ async function searchMovies() {
 // Input: Array of IMDB IDs. Output: HTML pushed to the DOM.
 async function renderSearch(array) {
   // An array of movie objects
-  let movieObjectsArray = []
   let listOfIDs = await array
 
   // Construct movie object for each search result
   for (let i = 0; i < listOfIDs.length; i++) {
-    movieObjectsArray.push(new Movie(listOfIDs[i]))
-    //movieObjectsArray[i].retrieveMovieInfo()
+    movieResultsArray.push(new Movie(listOfIDs[i]))
+    //movieResultsArray[i].retrieveMovieInfo()
   }
 
 
   // Add movie info to each object - this could probably be combined with the previous FOR loop
-  for (let i = 0; i < movieObjectsArray.length; i++) {
-    movieObjectsArray[i] = await movieObjectsArray[i].retrieveMovieInfo()
+  for (let i = 0; i < movieResultsArray.length; i++) {
+    movieResultsArray[i].Info = await movieResultsArray[i].retrieveMovieInfo()
   }
 
 
   // Construct HTML from objects
   let resultsHTML = ""
 
-  console.log(movieObjectsArray[0].Ratings[0])
-  for (let i = 0; i < movieObjectsArray.length; i++) {
+  for (let i = 0; i < movieResultsArray.length; i++) {
+
+    let posterURL = "https://images.unsplash.com/photo-1652284225205-a27fce2b2ba7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1960&q=80"
+    if (movieResultsArray[i].Info.Poster != "N/A") {
+      posterURL = movieResultsArray[i].Info.Poster
+    }
+
+    let title = "NA"
+    if (movieResultsArray[i].Info.Title) {
+      title = movieResultsArray[i].Info.Title
+    }
+
+    let rating = "NA"
+    if (movieResultsArray[i].Info.Ratings[0]) {
+      rating = movieResultsArray[i].Info.Ratings[0].Value
+    }
+
+    let runtime = "NA"
+    if (movieResultsArray[i].Info.Runtime) {
+      runtime = movieResultsArray[i].Info.Runtime
+    }
+
+    let genre = "unknown genre"
+    if (movieResultsArray[i].Info.Genre) {
+      genre = movieResultsArray[i].Info.Genre
+    }
+
+    let plot = "NA"
+    if (movieResultsArray[i].Info.Plot) {
+      plot = movieResultsArray[i].Info.Plot
+    }
+
     resultsHTML += `
-      <img src="${movieObjectsArray[i].Poster}" />
-      <h2>${movieObjectsArray[i].Title}</h2>
-      <img src="img/star.png" /><p>${movieObjectsArray[i].Ratings[0]["Value"]}</p>
+      <div class="movie-result">
+        <img src="${posterURL}"/>
+        <h2>${title}</h2>
+        <img src="img/star.png" /><p>${rating}</p>
+        <p>${runtime}</p>
+        <p>${genre}</p>
+        <button id="${movieResultsArray[i].ID}" class="watchlist-btn"><img src="img/plus.png" />Watchlist</button>
+        <p>${plot}</p>
+      </div>
     `
   }
 
   document.getElementById("search-results").innerHTML = resultsHTML
+  addListeners()
 }
 
 
@@ -71,7 +110,6 @@ class Movie {
     // Make a call to the OMDB
     const res = await fetch(`http://www.omdbapi.com/?apikey=${omdbKey}&i=${this.ID}`)
     const data = await res.json()
-    //console.log(data.Plot)
     return data
   }
 
@@ -84,4 +122,26 @@ class Movie {
 }
 
 
-// TODO: I need to supply fake data, or have a better failure mechanism when something like ratings don't exist for a movie.
+
+
+// Save to Watchlist
+// We need to pass in the id of the button so the button's click event will correspond to that particular movie.
+
+
+// Create a function that executes after search results appear
+function addListeners() {
+  let allButtons = document.querySelectorAll(".watchlist-btn")
+
+  for (let i = 0; i < allButtons.length; i++) {
+    document.getElementById(allButtons[i].id).addEventListener("click", () => addToList(allButtons[i].id))
+  }
+}
+
+function addToList(movieID) {
+  wishList.push(movieResultsArray.filter(movie => movie.ID === movieID)[0])
+  console.log(wishList)
+}
+
+
+
+// I could make it so that if a piece of data doesn't exist, I hide the element.
