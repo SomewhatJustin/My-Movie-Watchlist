@@ -27,3 +27,5 @@ class Movie {
 }
 
 export { Movie }
+
+// I could move the HTML logic into this class

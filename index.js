@@ -116,8 +116,7 @@ function addToList(movieID) {
   wishList.push(movieResultsArray.filter(movie => movie.ID === movieID)[0])
   // Save list of IDs to localstorage
   console.log(wishList)
-  localStorage.setItem("wishList", wishList.map(movie => JSON.stringify(movie.ID)))
+  localStorage.setItem("watchList", wishList.map(movie => JSON.stringify(movie.ID)))
 }
 
-// I could make it so that if a piece of data doesn't exist, I hide the element.
-
+// TODO: make it so that localstorage doesn't keep getting overwritten
