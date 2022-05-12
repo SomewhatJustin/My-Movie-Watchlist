@@ -1,8 +1,10 @@
-let movieResultsArray = []
-let wishList = []
-
 // Gitignored API key
 import { omdbKey } from './secrets.js'
+import { Movie } from './movie.js'
+
+// Global Variables
+let movieResultsArray = []
+let wishList = []
 
 // Event listener for search button
 const searchBtn = document.getElementById("search-btn")
@@ -95,33 +97,6 @@ async function renderSearch(array) {
 
 
 
-// Movie Constructor
-// all we need to initialize a new movie is the IMDB ID
-class Movie {
-  constructor(imdbID) {
-    this.ID = imdbID
-
-    // this is returning a promise, not the actual value yet
-    this.Info = this.getMovieInfo()
-  }
-
-  // Get full movie info
-  async getMovieInfo() {
-    // Make a call to the OMDB
-    const res = await fetch(`http://www.omdbapi.com/?apikey=${omdbKey}&i=${this.ID}`)
-    const data = await res.json()
-    return data
-  }
-
-  async retrieveMovieInfo() {
-    // awaits for completion (shoutout to https://bytearcher.com/articles/asynchronous-call-in-constructor/)
-    const response = await this.Info
-    return response
-  }
-
-}
-
-
 
 
 // Save to Watchlist
@@ -139,9 +114,10 @@ function addListeners() {
 
 function addToList(movieID) {
   wishList.push(movieResultsArray.filter(movie => movie.ID === movieID)[0])
+  // Save list of IDs to localstorage
   console.log(wishList)
+  localStorage.setItem("wishList", wishList.map(movie => JSON.stringify(movie.ID)))
 }
 
-
-
 // I could make it so that if a piece of data doesn't exist, I hide the element.
+
