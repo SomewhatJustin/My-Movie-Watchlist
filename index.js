@@ -4,7 +4,11 @@ import { Movie } from './movie.js'
 
 // Global Variables
 let movieResultsArray = []
+
 let wishList = []
+if (localStorage.getItem('watchList')) {
+  wishList = localStorage.getItem('watchList').replace(/["]+/g, '').split(",")
+}
 
 // Event listener for search button
 const searchBtn = document.getElementById("search-btn")
@@ -27,8 +31,15 @@ async function searchMovies() {
 
 // Input: Array of IMDB IDs. Output: HTML pushed to the DOM.
 async function renderSearch(array) {
+
   // An array of movie objects
   let listOfIDs = await array
+
+
+  // Clear results if they already exist
+  let resultsHTML = ""
+  document.getElementById("search-results").innerHTML = resultsHTML
+  movieResultsArray = []
 
   // Construct movie object for each search result
   for (let i = 0; i < listOfIDs.length; i++) {
@@ -44,7 +55,7 @@ async function renderSearch(array) {
 
 
   // Construct HTML from objects
-  let resultsHTML = ""
+  resultsHTML = ""
 
   for (let i = 0; i < movieResultsArray.length; i++) {
 
@@ -113,10 +124,12 @@ function addListeners() {
 }
 
 function addToList(movieID) {
-  wishList.push(movieResultsArray.filter(movie => movie.ID === movieID)[0])
-  // Save list of IDs to localstorage
-  console.log(wishList)
-  localStorage.setItem("watchList", wishList.map(movie => JSON.stringify(movie.ID)))
+  if (wishList.includes(movieID)) {
+    console.log("already added!")
+  } else {
+    wishList.push(movieResultsArray.map(movie => movie.ID).filter(movie => movie === movieID)[0])
+    // Save list of IDs to localstorage
+    console.log(wishList)
+    localStorage.setItem("watchList", wishList)
+  }
 }
-
-// TODO: make it so that localstorage doesn't keep getting overwritten
