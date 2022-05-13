@@ -7,8 +7,12 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background: url('img/background.jpg');
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, .8);
+  background: #0F2027;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: white;
   background-repeat: no-repeat;
   background-size: contain;
@@ -74,7 +78,8 @@ body {
 }
 
 
-#search-results {
+#search-results,
+#watchlist {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,11 +105,22 @@ body {
   font-size: 18px;
 }
 
+#placeholder div img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+#placeholder a {
+  text-decoration: none;
+  color: black;
+}
+
 /*  
 MOVIE RESULTS
 */
 
-#search-results hr {
+#search-results hr,
+#watchlist hr {
   width: 80%;
   border: 1px solid #eee;
 }

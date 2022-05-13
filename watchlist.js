@@ -66,18 +66,34 @@ async function renderWatchList(listOfIDs) {
     let plot = "NA"
     if (movieList[i].Info.Plot) {
       plot = movieList[i].Info.Plot
+
+      if (plot.length == 233) {
+        if (plot.substring(230, 233) != "...") {
+          console.log(plot.substring(230, 233))
+          plot = plot + "..."
+        }
+      }
     }
 
     watchListHTML += `
-      <div class="movie-result">
-        <img src="${posterURL}"/>
+    <div class="movie-result">
+    <div id="poster-container">
+      <img src="${posterURL}"/>
+    </div>
+    <div id="movie-info-container">
+      <div id="movie-title-container">
         <h2>${title}</h2>
-        <img src="img/star.png" /><p>${rating}</p>
+        <img src="img/star.svg" /><p>${rating}</p>
+      </div>
+      <div id="movie-specs-container">
         <p>${runtime}</p>
         <p>${genre}</p>
         <button id="${movieList[i].ID}" class="remove-btn"><img src="img/minus.png" />Remove</button>
-        <p>${plot}</p>
       </div>
+      <p class="movie-plot">${plot}</p>
+    </div>
+  </div>
+  <hr>
     `
   }
 

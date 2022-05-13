@@ -19,14 +19,22 @@ searchBtn.addEventListener("click", searchMovies)
 async function searchMovies() {
   // Get the query
   let searchQuery = document.getElementById("ombd-search").value
+  console.log(searchQuery)
 
   // Call out to the OMDB search API
   const res = await fetch(`http://www.omdbapi.com/?apikey=${omdbKey}&s=${searchQuery}`)
   const data = await res.json()
+  console.log(data)
+
+
 
   // Create an array of movie IDs from search results and send to render function
-  let movieIDArray = await data.Search.map(item => item.imdbID)
-  renderSearch(movieIDArray)
+  if (data.Search) {
+    let movieIDArray = await data.Search.map(item => item.imdbID)
+    renderSearch(movieIDArray)
+  } else {
+    document.getElementById("placeholder").innerHTML = `<h3>No movies found! Try another search query.</h3>`
+  }
 }
 
 // Input: Array of IMDB IDs. Output: HTML pushed to the DOM.
