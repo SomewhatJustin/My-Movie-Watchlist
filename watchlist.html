@@ -6,13 +6,27 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Movie Watchlist</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <h1>My watchlist</h1>
-  <p><a href="/">Search for movies</a></p>
-  <div id="watchlist">
+  <div id="header">
+    <div class="row">
+      <h1>My Watchlist</h1>
+      <p><a href="/index.html">Search for movies</a></p>
+    </div>
+  </div>
 
+  <div id="watchlist">
+    <div id="placeholder">
+      <h3>Your watchlist is looking a little empty...</h3>
+      <a href="./index.html">
+        <div class="row">
+          <img src="img/plus.png" />
+          <h4>Let's add some movies!</h4>
+        </div>
+      </a>
+    </div>
   </div>
   <script src="watchlist.js" type="module"></script>
 </body>
