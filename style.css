@@ -99,3 +99,105 @@ body {
   color: #DFDDDD;
   font-size: 18px;
 }
+
+/*  
+MOVIE RESULTS
+*/
+
+#search-results hr {
+  width: 80%;
+  border: 1px solid #eee;
+}
+
+.movie-result {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  max-width: 650px;
+  align-items: center;
+}
+
+#poster-container {
+  margin-right: 20px;
+}
+
+#poster-container img {
+  width: 150px;
+}
+
+#movie-info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#movie-title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#movie-title-container h2 {
+  margin-right: 8px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #000;
+}
+
+#movie-title-container p {
+  color: #111827;
+}
+
+#movie-title-container img {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+#movie-specs-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#movie-specs-container button {
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+  transition: .2s;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+#movie-specs-container button:hover {
+  background: #eee;
+}
+
+#movie-specs-container button img {
+  height: 18px;
+  margin-right: 5px;
+  margin-top: -1px;
+}
+
+#movie-specs-container p,
+#movie-specs-container button {
+  margin-right: 20px;
+  height: 32px;
+  background: none;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+}
+
+.movie-plot {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: #6B7280;
+}
+
+/* Hide movies with no plot */
+.hidden {
+  height: 0px;
+  visibility: hidden;
+  margin: 0px;
+}

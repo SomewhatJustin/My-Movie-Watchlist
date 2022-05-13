@@ -71,7 +71,7 @@ async function renderSearch(array) {
 
     let rating = "NA"
     if (movieResultsArray[i].Info.Ratings[0]) {
-      rating = movieResultsArray[i].Info.Ratings[0].Value
+      rating = movieResultsArray[i].Info.Ratings[0].Value.split("/")[0]
     }
 
     let runtime = "NA"
@@ -84,26 +84,48 @@ async function renderSearch(array) {
       genre = movieResultsArray[i].Info.Genre
     }
 
-    let plot = "NA"
+    let plot
+    let isHidden
     if (movieResultsArray[i].Info.Plot) {
+      if (movieResultsArray[i].Info.Plot == "N/A") {
+        isHidden = "hidden"
+      }
+
       plot = movieResultsArray[i].Info.Plot
+
+      if (plot.length == 233) {
+        if (plot.substring(230, 233) != "...") {
+          console.log(plot.substring(230, 233))
+          plot = plot + "..."
+        }
+      }
     }
 
     resultsHTML += `
-      <div class="movie-result">
-        <img src="${posterURL}"/>
-        <h2>${title}</h2>
-        <img src="img/star.png" /><p>${rating}</p>
-        <p>${runtime}</p>
-        <p>${genre}</p>
-        <button id="${movieResultsArray[i].ID}" class="watchlist-btn"><img src="img/plus.png" />Watchlist</button>
-        <p>${plot}</p>
+      <div class="movie-result ${isHidden}">
+        <div id="poster-container">
+          <img src="${posterURL}"/>
+        </div>
+        <div id="movie-info-container">
+          <div id="movie-title-container">
+            <h2>${title}</h2>
+            <img src="img/star.svg" /><p>${rating}</p>
+          </div>
+          <div id="movie-specs-container">
+            <p>${runtime}</p>
+            <p>${genre}</p>
+            <button id="${movieResultsArray[i].ID}" class="watchlist-btn"><img src="img/plus.png" />Watchlist</button>
+          </div>
+          <p class="movie-plot">${plot}</p>
+        </div>
       </div>
+      <hr class="${isHidden}">
     `
   }
 
   document.getElementById("search-results").innerHTML = resultsHTML
   addListeners()
+  alreadyAdded()
 }
 
 
@@ -131,5 +153,22 @@ function addToList(movieID) {
     // Save list of IDs to localstorage
     console.log(wishList)
     localStorage.setItem("watchList", wishList)
+    alreadyAdded()
+  }
+}
+
+// Change button if already on watchlist
+function alreadyAdded() {
+  let allButtons = document.querySelectorAll(".watchlist-btn")
+
+  for (let i = 0; i < allButtons.length; i++) {
+    if (wishList.includes(allButtons[i].id)) {
+      allButtons[i].classList.add("already-added")
+      allButtons[i].innerHTML = "Added"
+      allButtons[i].style.background = "green"
+      allButtons[i].style.color = "white"
+      allButtons[i].style.border = "none"
+      allButtons[i].style.cursor = "default"
+    }
   }
 }
